@@ -96,8 +96,6 @@ def turnRightWheel():
  
 # Start main loop
 while True:
-  print Seq[StepCounter]
-
   turnLeftWheel()
   turnRightWheel()
  
