@@ -35,7 +35,7 @@ GPIO.output(Motor2B,GPIO.LOW)
 GPIO.output(Motor2C,GPIO.LOW)
 GPIO.output(Motor2D,GPIO.HIGH)
 
-sleep(0,02)
+sleep(2)
  
 print "Going backwards"
 GPIO.output(Motor1A,GPIO.LOW)
@@ -48,7 +48,7 @@ GPIO.output(Motor2B,GPIO.HIGH)
 GPIO.output(Motor2C,GPIO.HIGH)
 GPIO.output(Motor2D,GPIO.HIGH)
  
-sleep(0,02)
+sleep(2)
 
 print "Now stop"
 GPIO.output(Motor1E,GPIO.LOW)
