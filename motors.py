@@ -56,34 +56,36 @@ StepCounterR = 0
  
  
 def turnLeftWheel():
-  #LEFT PINS
-  for pin in range(0,4):
-    xpin=StepPinsL[pin]# Get GPIO
-    if Seq[StepCounterL][pin]!=0:
-      print " Enable GPIO %i" %(xpin)
-      GPIO.output(xpin, True)
-    else:
-      GPIO.output(xpin, False)
- 
-  StepCounterL += StepDirL
+	global stepCounterL
+	#LEFT PINS
+	for pin in range(0,4):
+		xpin=StepPinsL[pin]# Get GPIO
+		if Seq[StepCounterL][pin]!=0:
+		  print " Enable GPIO %i" %(xpin)
+		  GPIO.output(xpin, True)
+		else:
+		  GPIO.output(xpin, False)
 
-  # If we reach the end of the sequence
-  # start again
-  if (StepCounterL>=StepCount):
-    StepCounterL = 0
-  if (StepCounterL<0):
-    StepCounterL = StepCount+StepDirL
+	StepCounterL += StepDirL
+
+	# If we reach the end of the sequence
+	# start again
+	if (StepCounterL>=StepCount):
+		StepCounterL = 0
+	if (StepCounterL<0):
+		StepCounterL = StepCount+StepDirL
 
 def turnRightWheel():
-  for pin in range(0,4):
-    xpin=StepPinsR[pin]# Get GPIO
-    if Seq[StepCounterR][pin]!=0:
-      print " Enable GPIO %i" %(xpin)
-      GPIO.output(xpin, True)
-    else:
-      GPIO.output(xpin, False)
- 
-  StepCounterR += StepDirR
+	global stepCounterR
+	for pin in range(0,4):
+		xpin=StepPinsR[pin]# Get GPIO
+		if Seq[StepCounterR][pin]!=0:
+		  print " Enable GPIO %i" %(xpin)
+		  GPIO.output(xpin, True)
+		else:
+		  GPIO.output(xpin, False)
+
+	StepCounterR += StepDirR
 
  
   # If we reach the end of the sequence
