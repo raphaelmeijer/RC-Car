@@ -40,10 +40,10 @@ Seq = [
    [0,0,0,1]
 ]
         
-StepCount = len(Seq)
-StepDirR = 1 # Set to 1 or 2 for clockwise
+StepCount 	= len(Seq)
+StepDirR 	= 1 # Set to 1 or 2 for clockwise
             # Set to -1 or -2 for anti-clockwise
-StepDirL = -1; 
+StepDirL 	= -1; 
 # Read wait time from command line
 if len(sys.argv)>1:
   WaitTime = int(sys.argv[1])/float(1000)
@@ -80,20 +80,20 @@ def turnRightWheel():
 	for pin in range(0,4):
 		xpin=StepPinsR[pin]# Get GPIO
 		if Seq[StepCounterR][pin]!=0:
-		  print " Enable GPIO %i" %(xpin)
-		  GPIO.output(xpin, True)
+			print " Enable GPIO %i" %(xpin)
+			GPIO.output(xpin, True)
 		else:
-		  GPIO.output(xpin, False)
+			GPIO.output(xpin, False)
 
 	StepCounterR += StepDirR
 
  
-  # If we reach the end of the sequence
-  # start again
-  if (StepCounterR>=StepCount):
-    StepCounterR = 0
-  if (StepCounterR<0):
-    StepCounterR = StepCount+StepDirR
+	# If we reach the end of the sequence
+	# start again
+	if (StepCounterR>=StepCount):
+		StepCounterR = 0
+	if (StepCounterR<0):
+		StepCounterR = StepCount+StepDirR
 
  
 # Start main loop
