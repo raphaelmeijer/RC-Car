@@ -13,6 +13,9 @@ GPIO.setmode(GPIO.BCM)
 # GPIO17,GPIO22,GPIO23,GPIO24
 StepPinsR = [2,3,4,17]
 StepPinsL = [27,22,10,9]
+
+# Define speed of the wheels
+Speed	= 0.0005
  
 # Set all pins as output
 for pin in StepPinsL:
@@ -103,4 +106,4 @@ while True:
   StepCounterR = turnRightWheel( StepCounterR )
  
   # Wait before moving on
-  time.sleep(WaitTime/4)
+  time.sleep(Speed)
