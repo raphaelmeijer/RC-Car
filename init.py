@@ -7,7 +7,6 @@ from Sequence import Sequence
 from Wheel import Wheel
 import RPi.GPIO as GPIO
  
-Sensors     = Sensors()
 Sequence    = Sequence()
 
 # Use BCM GPIO references
@@ -32,9 +31,7 @@ for pin in StepPinsR:
   print "Setup pins"
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
-
-for pin in SensPins:
-    GPIO.setup(pin,GPIO.IN)
-  
-leftWheel   = Wheel( StepPinsR, 1, -1 )
+ 
+Sensors	= Sensors( GPIO ) 
+leftWheel   = Wheel( StepPinsL, 1, -1 )
 rightWheel  = Wheel( StepPinsR, 1, 1 )
