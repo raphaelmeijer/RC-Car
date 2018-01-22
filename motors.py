@@ -15,11 +15,18 @@ StepPinsR = [2,3,4,17]
 StepPinsL = [27,22,10,9]
  
 # Set all pins as output
-for pin in StepPins:
+for pin in StepPinsL:
   print "Setup pins"
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
- 
+
+# Set all pins as output
+for pin in StepPinsR:
+  print "Setup pins"
+  GPIO.setup(pin,GPIO.OUT)
+  GPIO.output(pin, False)
+
+  
 # Define advanced sequence
 # as shown in manufacturers datasheet
 Seq = [
