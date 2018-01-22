@@ -22,14 +22,14 @@ for pin in StepPins:
 # Define advanced sequence
 # as shown in manufacturers datasheet
 Seq = [
-   [1,0,0,1,1,0,0,1],
-   [1,0,0,0,1,0,0,0],
-   [1,1,0,0,1,1,0,0],
-   [0,1,0,0,0,1,0,0],
-   [0,1,1,0,0,1,1,0],
-   [0,0,1,0,0,0,1,0],
-   [0,0,1,1,0,0,1,1],
-   [0,0,0,1,0,0,0,1]
+   [1,0,0,1,-1,0,0,-1],
+   [1,0,0,0,-1,0,0,0],
+   [1,1,0,0,-1,-1,0,0],
+   [0,1,0,0,0,-1,0,0],
+   [0,1,1,0,0,-1,-1,0],
+   [0,0,1,0,0,0,-1,0],
+   [0,0,1,1,0,0,-1,-1],
+   [0,0,0,1,0,0,0,-1]
 ]
         
 StepCount = len(Seq)
@@ -69,4 +69,4 @@ while True:
     StepCounter = StepCount+StepDir
  
   # Wait before moving on
-  time.sleep(WaitTime)
+  time.sleep(WaitTime/2)
