@@ -13,7 +13,7 @@ GPIO.setmode(GPIO.BCM)
 # GPIO17,GPIO22,GPIO23,GPIO24
 StepPinsR = [2,3,4,17]
 StepPinsL = [27,22,10,9]
-
+SensPins    = [14,15,18]
 # Define speed of the wheels
 Speed	= 0.0005
  
@@ -29,6 +29,8 @@ for pin in StepPinsR:
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
 
+for pin in SensPins:
+    GPIO.setup(pin,GPIO.IN)
   
 # Define advanced sequence
 # as shown in manufacturers datasheet
@@ -102,8 +104,12 @@ def turnRightWheel( StepCounterR ):
  
 # Start main loop
 while True:
-  StepCounterL = turnLeftWheel( StepCounterL )
-  StepCounterR = turnRightWheel( StepCounterR )
+    StepCounterL = turnLeftWheel( StepCounterL )
+    StepCounterR = turnRightWheel( StepCounterR )
  
-  # Wait before moving on
-  time.sleep(Speed)
+    # try to echo the pins
+    for pin in SensPins
+        GPIO.input( pin )
+
+    # Wait before moving on
+    time.sleep(Speed)
