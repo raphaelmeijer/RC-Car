@@ -67,4 +67,4 @@ while True:
     StepCounter = StepCount+StepDir
  
   # Wait before moving on
-  # time.sleep(WaitTime)
+  time.sleep(WaitTime)
