@@ -2,13 +2,13 @@ class Sensors:
     
     direction   = "FORWARD";
 
-    def getDirection( pin ):
-        return direction
-    def setDirection( pins ):
-        if( pins[0] == 0 && pins[1] == 0 && pins[2] == 0 )
-            direction   = "FORWARD"
-        else if( pins[0] == 1 && pins[1] == 0 && pins[2] == 0 )
-            direction   = "LEFT"
-        else if( pins[0] == 1 && pins[1] == 1 && pins[2] == 0 )
-            direction   = "RIGHT"
+    def getDirection(self ):
+        return self.direction
+    def setCarDirection(self, pins ):
+        if( pins[0] == 1 and pins[1] == 0 and pins[2] == 1 ):
+           self.direction   = "FORWARD"
+        elif( pins[0] == 1 and ( pins[1] == 0 or pins[1] == 1 ) and pins[2] == 0 ):
+           self.direction   = "LEFT"
+        elif( pins[0] == 0 and ( pins[1] == 0 or pins[1] == 1 ) and pins[2] == 1 ):
+           self.direction   = "RIGHT"
     

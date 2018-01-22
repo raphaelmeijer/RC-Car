@@ -2,8 +2,8 @@
 # Import required libraries
 import sys
 import time
-import Sensors.py as Sensors
-import Sequence.py as Sequence
+from Sensors import Sensors
+from Sequence import Sequence
 import RPi.GPIO as GPIO
  
 Sensors     = Sensors()
@@ -20,7 +20,7 @@ StepPinsR   = [2,3,4,17]
 StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
 SensValues  = [0,0,0]
-Speed       = Sequence['FORWARD']
+Speed       = Sequence.FORWARD
 
 # Set all pins as output
 for pin in StepPinsL:
@@ -53,13 +53,7 @@ Seq = [
 StepCount 	= len(Seq)
 StepDirR 	= 1 # Set to 1 or 2 for clockwise
             # Set to -1 or -2 for anti-clockwise
-StepDirL 	= -1; 
-# Read wait time from command line
-if len(sys.argv)>1:
-  WaitTime = int(sys.argv[1])/float(1000)
-else:
-  WaitTime = 10/float(1000)
- 
+StepDirL 	= -1;  
 # Initialise variables
 StepCounterL = 0
 StepCounterR = 0
@@ -82,6 +76,7 @@ def turnLeftWheel( StepCounterL ):
 		StepCounterL = 0
 	if (StepCounterL<0):
 		StepCounterL = StepCount+StepDirL
+        time.sleep(Speed[0])
 
 	return StepCounterL
 	
@@ -104,26 +99,21 @@ def turnRightWheel( StepCounterR ):
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
 	
+	time.sleep( Speed[1] )
+
 	return StepCounterR
  
 while True: 
     counter = 0
-    # try to echo the pins
-    for pin in SensPins
-       SensValues[counter] = GPIO.input( pin )
-       counter++;
-    counter = 0
-    Sensors.setDirection(Sensors)
-    Speed   = Sequence[Sensors.getDirection()]
-
-
-# Start main loop
-while True:
-    StepCounterR = turnRightWheel( StepCounterR )
-    # Wait before moving on
-    time.sleep(Speed[1])
-
-while True:
     StepCounterL = turnLeftWheel( StepCounterL )
-    # Wait before moving on
-    time.sleep(Speed[0])
+    StepCounterR = turnRightWheel( StepCounterR )
+    # try to echo the pins
+    for pin in SensPins:
+       SensValues[counter] = GPIO.input( pin )
+       counter = counter + 1
+    counter = 0
+    print SensValues
+    print Sensors.getDirection()
+    Sensors.setCarDirection(SensValues)
+    Speed   = getattr( Sequence, Sensors.getDirection() )
+    print Speed
