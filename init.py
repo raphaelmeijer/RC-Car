@@ -2,8 +2,13 @@
 # Import required libraries
 import sys
 import time
+import Sensors.py as Sensors
+import Sequence.py as Sequence
 import RPi.GPIO as GPIO
  
+Sensors     = Sensors()
+Sequence    = Sequence()
+
 # Use BCM GPIO references
 # instead of physical pin numbers
 GPIO.setmode(GPIO.BCM)
@@ -11,12 +16,12 @@ GPIO.setmode(GPIO.BCM)
 # Define GPIO signals to use
 # Physical pins 11,15,16,18
 # GPIO17,GPIO22,GPIO23,GPIO24
-StepPinsR = [2,3,4,17]
-StepPinsL = [27,22,10,9]
+StepPinsR   = [2,3,4,17]
+StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
-# Define speed of the wheels
-Speed	= 0.0005
- 
+SensValues  = [0,0,0]
+Speed       = Sequence['FORWARD']
+
 # Set all pins as output
 for pin in StepPinsL:
   print "Setup pins"
@@ -58,7 +63,6 @@ else:
 # Initialise variables
 StepCounterL = 0
 StepCounterR = 0
- 
  
 def turnLeftWheel( StepCounterL ):
 	#LEFT PINS
@@ -102,14 +106,24 @@ def turnRightWheel( StepCounterR ):
 	
 	return StepCounterR
  
-# Start main loop
-while True:
-    StepCounterL = turnLeftWheel( StepCounterL )
-    StepCounterR = turnRightWheel( StepCounterR )
- 
+while True: 
+    counter = 0
     # try to echo the pins
     for pin in SensPins
-        GPIO.input( pin )
+       SensValues[counter] = GPIO.input( pin )
+       counter++;
+    counter = 0
+    Sensors.setDirection(Sensors)
+    Speed   = Sequence[Sensors.getDirection()]
 
+
+# Start main loop
+while True:
+    StepCounterR = turnRightWheel( StepCounterR )
     # Wait before moving on
-    time.sleep(Speed)
+    time.sleep(Speed[1])
+
+while True:
+    StepCounterL = turnLeftWheel( StepCounterL )
+    # Wait before moving on
+    time.sleep(Speed[0])
