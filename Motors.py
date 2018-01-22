@@ -28,12 +28,12 @@ print "Going forwards"
 GPIO.output(Motor1A,GPIO.HIGH)
 GPIO.output(Motor1B,GPIO.LOW)
 GPIO.output(Motor1C,GPIO.HIGH)
-GPIO.output(Motor1D,GPIO.low)
+GPIO.output(Motor1D,GPIO.LOW)
  
 GPIO.output(Motor2A,GPIO.HIGH)
 GPIO.output(Motor2B,GPIO.LOW)
 GPIO.output(Motor2C,GPIO.HIGH)
-GPIO.output(Motor2D,GPIO.low)
+GPIO.output(Motor2D,GPIO.LOW)
 
 sleep(2)
  
