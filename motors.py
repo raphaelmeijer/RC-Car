@@ -55,8 +55,7 @@ StepCounterL = 0
 StepCounterR = 0
  
  
-def turnLeftWheel():
-	global stepCounterL
+def turnLeftWheel( StepCounterL ):
 	#LEFT PINS
 	for pin in range(0,4):
 		xpin=StepPinsL[pin]# Get GPIO
@@ -75,8 +74,9 @@ def turnLeftWheel():
 	if (StepCounterL<0):
 		StepCounterL = StepCount+StepDirL
 
-def turnRightWheel():
-	global stepCounterR
+	return StepCounterL
+	
+def turnRightWheel( StepCounterR ):
 	for pin in range(0,4):
 		xpin=StepPinsR[pin]# Get GPIO
 		if Seq[StepCounterR][pin]!=0:
@@ -94,12 +94,13 @@ def turnRightWheel():
 		StepCounterR = 0
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
-
+	
+	return StepCounterR
  
 # Start main loop
 while True:
-  turnLeftWheel()
-  turnRightWheel()
+  StepCounterL = turnLeftWheel( StepCounterL )
+  StepCounterR = turnRightWheel( StepCounterR )
  
   # Wait before moving on
   time.sleep(WaitTime/4)
