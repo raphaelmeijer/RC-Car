@@ -21,7 +21,7 @@ def setup_pins( pins ):
 	  GPIO.setup(pin,GPIO.OUT)
 	  GPIO.output(pin, False)
 
-def forward( stepPins ):
+def forward( StepPins ):
 	# Define advanced sequence
 	# as shown in manufacturers datasheet
 	Seq = [[1,0,0,1],
