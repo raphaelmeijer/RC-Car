@@ -20,8 +20,10 @@ GPIO.setmode(GPIO.BCM)
 StepPinsR   = [2,3,4,17]
 StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
+ButtonPins	= [26]
 SensValues  = [0,0,0]
 Speed       = Sequence.FORWARD
+DoDrive		= false
 
 # Set all pins as output
 for pin in StepPinsL:
@@ -37,7 +39,10 @@ for pin in StepPinsR:
 
 for pin in SensPins:
     GPIO.setup(pin,GPIO.IN)
-  
+
+for pin in SensValues:
+	GPIO.setup(pin,GPIO.IN)
+
 # Define advanced Sequence
 # as shown in manufacturers datasheet
 sequence = [
@@ -118,18 +123,24 @@ def turn_right_wheel( StepCounterR ):
 	time.sleep( 0.0005 )
 
 	return StepCounterR
- 
+
+
+
 while True: 
-    counter = 0
-    StepCounterL = turn_left_wheel( StepCounterL )
-    StepCounterR = turn_right_wheel( StepCounterR )
-    # try to echo the pins
-    for pin in SensPins:
-       SensValues[counter] = GPIO.input( pin )
-       counter = counter + 1
-    counter = 0
-    print SensValues
-    print Sensors.getDirection()
-    Sensors.setCarDirection(SensValues)
-    Speed   = getattr( Sequence, Sensors.getDirection() )
-    print Speed
+	if(  GPIO.input( pin ) == 1 ):
+		DoDrive = True
+
+	if( DoDrive ):
+		if(  GPIO.input( pin ) == 1 ):
+			DoDrive = False
+		counter = 0
+		StepCounterL = turn_left_wheel( StepCounterL )
+		StepCounterR = turn_right_wheel( StepCounterR )
+		# try to echo the pins
+		for pin in SensPins:
+			SensValues[counter] = GPIO.input( pin )
+			counter = counter + 1
+		counter = 0
+		
+		Sensors.setCarDirection(SensValues)
+		Speed   = getattr( Sequence, Sensors.getDirection() )
