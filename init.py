@@ -3,12 +3,12 @@
 import sys
 import time
 from Sensors import Sensors
-from sequenceuence import sequenceuence
+from Sequence import Sequence
 import RPi.GPIO as GPIO
  
 # Init classes
 Sensors     = Sensors()
-sequenceuence    = sequenceuence()
+Sequence    = Sequence()
 
 # Use BCM GPIO references
 # instead of physical pin numbers
@@ -21,7 +21,7 @@ StepPinsR   = [2,3,4,17]
 StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
 SensValues  = [0,0,0]
-Speed       = sequenceuence.FORWARD
+Speed       = Sequence.FORWARD
 
 # Set all pins as output
 for pin in StepPinsL:
@@ -38,7 +38,7 @@ for pin in StepPinsR:
 for pin in SensPins:
     GPIO.setup(pin,GPIO.IN)
   
-# Define advanced sequenceuence
+# Define advanced Sequence
 # as shown in manufacturers datasheet
 sequence = [
    [1,0,0,1],
@@ -64,14 +64,14 @@ def turn_left_wheel( StepCounterL ):
 	#LEFT PINS
 	for pin in range(0,4):
 		xpin=StepPinsL[pin]# Get GPIO
-		if sequence[StepCounterL][pin]!=0:
+		if sequence[StepCounterL][pin]!=0:/
 		  GPIO.output(xpin, True)
 		else:
 		  GPIO.output(xpin, False)
 
 	StepCounterL += -1
 
-	# If we reach the end of the sequenceuence
+	# If we reach the end of the Sequence
 	# start again
 	if (StepCounterL >= StepCount):
 		StepCounterL = 0
@@ -94,7 +94,7 @@ def turn_right_wheel( StepCounterR ):
 	StepCounterR += 1
 
 
-	# If we reach the end of the sequenceuence
+	# If we reach the end of the Sequence
 	# start again
 	if (StepCounterR>=StepCount):
 		StepCounterR = 0
@@ -117,5 +117,5 @@ while True:
     print SensValues
     print Sensors.getDirection()
     Sensors.setCarDirection(SensValues)
-    Speed   = getattr( sequenceuence, Sensors.getDirection() )
+    Speed   = getattr( Sequence, Sensors.getDirection() )
     print Speed
