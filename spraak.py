@@ -1,11 +1,11 @@
-class Aftellen
+
 
 
 import pyttsx
-count = 3
 import time
 
-def aftellen()
+def aftellen():
+	count = 3
 	while (count > 0): 
 		engine = pyttsx.init()
 		engine.say(count)
@@ -13,6 +13,16 @@ def aftellen()
 		count = count -1
 		print count
 
-	time.sleep(1) 
+		time.sleep(1) 
 	
+def spraak():
+		engine = pyttsx.init()
+		engine.say("begin")
+		engine.runAndWait()
+		
+		
+
+		
+
 aftellen()
+spraak()
