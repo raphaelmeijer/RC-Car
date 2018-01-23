@@ -60,9 +60,13 @@ StepCounterL = 0
 StepCounterR = 0
  
 def turn_left_wheel( StepCounterL ):
-	if Speed[0] > Speed[1]: 
+	global StepDirL
+	
+	if Speed[0] == Speed[1]:
+		StepDirL = -1
+	elif Speed[0] > Speed[1]: 
 		if( Sensors.getDirection() == "LEFT" ):
-			StepDirL	= -1
+			StepDirL	= 1
 		else:	
 			return False
 	#LEFT PINS
@@ -73,20 +77,23 @@ def turn_left_wheel( StepCounterL ):
 		else:
 		  GPIO.output(xpin, False)
 
-	StepCounterL += -1
+	StepCounterL += StepDirL
 
 	# If we reach the end of the Sequence
 	# start again
 	if (StepCounterL >= StepCount):
 		StepCounterL = 0
 	if (StepCounterL < 0):
-		StepCounterL = StepCount-1
+		StepCounterL = StepCount+StepDirL
 	
-	time.sleep(Speed[0])
+	time.sleep(0.0005)
 
 	return StepCounterL
 	
 def turn_right_wheel( StepCounterR ):
+	global StepDirR
+	if Speed[0] == Speed[1]:
+		StepDirR = 1
 	if Speed[0] < Speed[1]:
 		if( Sensors.getDirection() == "RIGHT" ):
 			StepDirR	= -1
@@ -99,7 +106,7 @@ def turn_right_wheel( StepCounterR ):
 		else:
 			GPIO.output(xpin, False)
 
-	StepCounterR += 1
+	StepCounterR += StepDirR
 
 	# If we reach the end of the Sequence
 	# start again
@@ -108,7 +115,7 @@ def turn_right_wheel( StepCounterR ):
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
 	
-	time.sleep( Speed[1] )
+	time.sleep( 0.0005 )
 
 	return StepCounterR
  
