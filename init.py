@@ -23,10 +23,10 @@ SensPins    = [14,15,18]
 ButtonPins	= [26]
 SensValues  = [0,0,0]
 Speed       = Sequence.FORWARD
-DoDrive		= false
+DoDrive		= False
 
 # Set all pins as output
-for pin in StepPinsL:
+for pin in StepPinsL: 
   print "Setup pins"
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
@@ -40,8 +40,8 @@ for pin in StepPinsR:
 for pin in SensPins:
     GPIO.setup(pin,GPIO.IN)
 
-for pin in SensValues:
-	GPIO.setup(pin,GPIO.IN)
+for pin in ButtonPins:
+	GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # Define advanced Sequence
 # as shown in manufacturers datasheet
@@ -127,12 +127,11 @@ def turn_right_wheel( StepCounterR ):
 
 
 while True: 
-	if(  GPIO.input( pin ) == 1 ):
+	if( GPIO.input( 26 ) == 0 ):
+		print "DETECTED: Started the protocol"
 		DoDrive = True
 
 	if( DoDrive ):
-		if(  GPIO.input( pin ) == 1 ):
-			DoDrive = False
 		counter = 0
 		StepCounterL = turn_left_wheel( StepCounterL )
 		StepCounterR = turn_right_wheel( StepCounterR )
