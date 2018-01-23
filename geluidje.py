@@ -6,7 +6,6 @@ def rndmp3 ():
 	file = ' /home/pi/music/'+ randomfile
 	os.system ('mplayer' + file)
 
-rndmp3 ()
 
 # global variables
 buttonPin = 26  # this will be an input pin to which the button is attached
