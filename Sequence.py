@@ -4,4 +4,4 @@ class Sequence:
     RIGHT   = [0.0005, 1]
 
     def getSequence( self, name ):
-	return self[name]
+	    return self[name]

@@ -1,20 +1,7 @@
 class Sensors:
     
-    direction   = "FORWARD"
-    SensPins    = [14,15,18]
-    SensValues  = [0,0,0]
-    GPIO        = False
-    def __init__( self, GPIO ):
-        self.GPIO = GPIO
-	while True:
-            # try to echo the pins
-            for pin in self.SensPins:
-                self.SensValues[counter] = self.GPIO.input( pin )
-                counter = counter + 1
-            
-            counter = 0
+    direction   = "FORWARD";
 
-            self.setCarDirection( SensValues )
     def getDirection(self ):
         return self.direction
     def setCarDirection(self, pins ):
