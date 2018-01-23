@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os, random
+import RPi.GPIO as GPIO
 
 def rndmp3 ():
 	randomfile = random.choice(os.listdir("/home/pi/music/"))
