@@ -60,11 +60,12 @@ StepCounterL = 0
 StepCounterR = 0
  
 def turn_left_wheel( StepCounterL ):
-	if speed[0] > speed[1] return
+	if Speed[0] > Speed[1]: 
+		return False
 	#LEFT PINS
 	for pin in range(0,4):
 		xpin=StepPinsL[pin]# Get GPIO
-		if sequence[StepCounterL][pin]!=0:/
+		if sequence[StepCounterL][pin]!=0:
 		  GPIO.output(xpin, True)
 		else:
 		  GPIO.output(xpin, False)
@@ -83,7 +84,8 @@ def turn_left_wheel( StepCounterL ):
 	return StepCounterL
 	
 def turn_right_wheel( StepCounterR ):
-	if speed[0] < speed[1] return
+	if Speed[0] < Speed[1]:
+		return False
 	for pin in range(0,4):
 		xpin=StepPinsR[pin]# Get GPIO
 		if sequence[StepCounterR][pin]!=0:
