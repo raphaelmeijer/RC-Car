@@ -4,6 +4,7 @@ import sys
 import time
 from Sensors import Sensors
 from Sequence import Sequence
+# import led
 import RPi.GPIO as GPIO
  
 # Init classes
@@ -15,13 +16,14 @@ GPIO.setmode(GPIO.BCM)
  
 # disable warning
 GPIO.setwarnings(False) 
- 
+
 # Define GPIO signals to use
 # Physical pins 11,15,16,18
 # GPIO17,GPIO22,GPIO23,GPIO24
 StepPinsR   = [2,3,4,17]
 StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
+LedPins 	= [5, 6, 13, 19, 20, 21]
 ButtonPins	= [26]
 SensValues  = [0,0,0]
 AllowedToDrive       = Sequence.FORWARD
@@ -47,6 +49,10 @@ print "SETUP: Setting up Button pins";
 for pin in ButtonPins:
 	GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+# Set all pins as output
+for pin in LedPins:
+  GPIO.setup(pin,GPIO.OUT)
+  GPIO.output(pin, True)
 # Define advanced Sequence
 # as shown in manufacturers datasheet
 sequence = [
@@ -172,3 +178,5 @@ while True:
 		AllowedToDrive   = getattr( Sequence, CarDirection )
 	# sleep temporarily
 	time.sleep( 0.0010 )
+
+GPIO.cleanup()
