@@ -20,14 +20,14 @@ def spraak():
 		engine.say("begin")
 		engine.runAndWait()
 		
-def rndmp3 ():
+def R2D2Random ():
 	randomfile = random.choice(os.listdir("/home/pi/music/"))
 	file = ' /home/pi/music/'+ randomfile
-	os.system ('mplayer' + file)
+	os.system ('omxplayer' + file)
 	
 def sandstorm ():
 	file = ' /home/pi/music/'sandstorm.mp3
-	os.system ('mplayer' + file)
+	os.system ('omxplayer' + file)
 		
 		
 
