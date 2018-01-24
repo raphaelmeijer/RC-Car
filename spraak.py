@@ -58,10 +58,10 @@ while True:
 
 	if (curr_state != prev_state):  
 		if (curr_state == 1):  
-			event = 
+			event = "released"
 			print event  
 		else:   
-			event = 
+			event = "pressed"
 			print event
 			
 			aftellen()
