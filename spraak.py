@@ -69,7 +69,7 @@ while True:
 			aftellen()
 			spraak()
 			sandstorm()
-				
+			
 			if (count_Pressed == 2):  
 				os.system(" killall -g omxplayer ")
 				
