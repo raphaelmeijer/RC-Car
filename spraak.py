@@ -67,11 +67,12 @@ while True:
 			count_Pressed = count_Pressed + 1
 			
 			aftellen()
-			spraak()
+			spraak()	
 			sandstorm()
 			
 			if (count_Pressed == 2):  
 				os.system(" killall -g omxplayer ")
+				break
 				
 		
 		prev_state = curr_state  
