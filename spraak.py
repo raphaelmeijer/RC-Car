@@ -70,7 +70,7 @@ while True:
 			aftellen()
 			spraak()	
 			sandstorm()
-			print HIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHI
+			print "HIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHIERHI"
 			
 			if (count_Pressed > 1):  
 				os.system(" killall -g omxplayer ")
