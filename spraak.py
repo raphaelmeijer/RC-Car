@@ -67,6 +67,13 @@ while True:
 			spraak()
 			sandstorm()
 			
+		if (curr_state == 1):  
+			event = "released"
+			print event  
+		else:   
+			event = "pressed"
+			print event
+			break
 		prev_state = curr_state  
 
 	time.sleep(0.02)  
