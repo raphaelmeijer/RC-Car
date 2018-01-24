@@ -64,13 +64,13 @@ while True:
 			event = "pressed"
 			print event
 			
-			count_Pressed+1
+			count_Pressed = count_Pressed + 1S
 			
 			aftellen()
 			spraak()
 			sandstorm(
 				
-				if (count_Pressed == 2):  
+			if (count_Pressed == 2):  
 				os.system(" killall -g omxplayer ")
 				)
 		
