@@ -31,6 +31,7 @@ def sandstorm ():
 	file = ' /home/pi/songs/sandstorm.mp3'
 	os.system ('omxplayer' + file)
 	
+count_Pressed = 0;
 	
 buttonPin = 26  
 				
@@ -63,16 +64,14 @@ while True:
 			event = "pressed"
 			print event
 			
+			count_Pressed++
+			
 			aftellen()
 			spraak()
 			sandstorm(
-				if (curr_state == 1):  
-				event = "released"
-				print event  
-				else:   
-				event = "pressed"
-				print event
-				break
+				
+				if (count_Pressed == 2):  
+				os.system(" killall -g omxplayer ")
 				)
 		
 		prev_state = curr_state  
