@@ -64,7 +64,7 @@ while True:
 			event = "pressed"
 			print event
 			
-			count_Pressed++
+			count_Pressed+1
 			
 			aftellen()
 			spraak()
