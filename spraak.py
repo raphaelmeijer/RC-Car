@@ -64,7 +64,8 @@ while True:
 			print event
 			
 			aftellen()
-			spraak(), sandstorm()
+			spraak()
+			sandstorm()
 			
 		prev_state = curr_state  
 
