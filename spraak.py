@@ -60,6 +60,9 @@ while True:
 		if (curr_state == 1):  
 			event = "released"
 			print event  
+			
+			count_Pressed = count_Pressed + 1
+			
 		else:   
 			event = "pressed"
 			print event
@@ -70,7 +73,7 @@ while True:
 			spraak()	
 			sandstorm()
 			
-			if (count_Pressed == 2):  
+			if (count_Pressed > 1):  
 				os.system(" killall -g omxplayer ")
 				break
 				
