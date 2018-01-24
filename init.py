@@ -10,7 +10,6 @@ import RPi.GPIO as GPIO
 Sensors     = Sensors()
 Sequence    = Sequence()
 
-# Use BCM GPIO references
 # instead of physical pin numbers
 GPIO.setmode(GPIO.BCM)
  
@@ -25,7 +24,7 @@ StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
 ButtonPins	= [26]
 SensValues  = [0,0,0]
-Speed       = Sequence.FORWARD
+AllowedToDrive       = Sequence.FORWARD
 DoDrive		= False
 
 print "SETUP: Setting up Left pins";
@@ -62,31 +61,38 @@ sequence = [
 ]
         
 StepCount 	= len(sequence)
-StepDirR 	= 1 # Set to 1 or 2 for clockwise
-            # Set to -1 or -2 for anti-clockwise
-StepDirL 	= -1;  
-# Initialise variables
-StepCounterL = 0
-StepCounterR = 0
- 
+StepDirR 	= 1 	# Set to 1 or 2 for clockwise
+StepDirL 	= -1;  	# Set to -1 or -2 for anti-clockwise
+StepCounterL = 0	# Will indicate the order later
+StepCounterR = 0	# Will indicate the order later
+
+# The left wheel will have it's own function
 def turn_left_wheel( StepCounterL ):
+	# We need the global var, otherwise it will reset always
 	global StepDirL
 	
-	if Speed[0] == Speed[1]:
+	# Check the direction of the wheel
+	if AllowedToDrive[0] and AllowedToDrive[1]:
+		# if have have the wheels, go front! ( the left wheel is a right wheel, so we have to do it in reverse )
 		StepDirL = -1
-	elif Speed[0] > Speed[1]: 
+	elif !AllowedToDrive[0] : 
+		# if we don't have the left wheel
 		if( Sensors.getDirection() == "LEFT" ):
+			# and we wanna go a sharp left, set to back
 			StepDirL	= 1
 		else:	
+			# otherwise, stop the wheel! - for a slow turn
 			return False
-	#LEFT PINS
-	for pin in range(0,4):
-		xpin=StepPinsL[pin]# Get GPIO
-		if sequence[StepCounterL][pin]!=0:
-		  GPIO.output(xpin, True)
+			
+	# Loop through the left wheel pins
+	for  in range(0,4):
+		xpin = StepPinsL[pin] # Get correct GPIO pin number
+		if sequence[StepCounterL][pin] != 0: # the pin is the same as the sequence we need
+		  GPIO.output(xpin, True)	# if it is higher than 0, we can activate the pin
 		else:
-		  GPIO.output(xpin, False)
+		  GPIO.output(xpin, False) 	# if it is lower than 1, we can deactivate the pin
 
+	# increment the step counter with the step in the correct direction
 	StepCounterL += StepDirL
 
 	# If we reach the end of the Sequence
@@ -96,24 +102,35 @@ def turn_left_wheel( StepCounterL ):
 	if (StepCounterL < 0):
 		StepCounterL = StepCount+StepDirL
 
+	# return the counter
 	return StepCounterL
 	
 def turn_right_wheel( StepCounterR ):
+	# We need the global var, otherwise it will reset always
 	global StepDirR
-	if Speed[0] == Speed[1]:
+	
+	if AllowedToDrive[0] and AllowedToDrive[1]:
+		# if have have the wheels, go front! ( the left wheel is a right wheel, so we have to do it in reverse )
 		StepDirR = 1
-	if Speed[0] < Speed[1]:
+	if !AllowedToDrive[1]:
+		# if we don't have the right wheel
 		if( Sensors.getDirection() == "RIGHT" ):
+			# and we wanna go a sharp left, set to back
 			StepDirR	= -1
 		else:	
+			# otherwise, stop the wheel! - for a slow turn
 			return False
-	for pin in range(0,4):
-		xpin=StepPinsR[pin]# Get GPIO
-		if sequence[StepCounterR][pin]!=0:
-			GPIO.output(xpin, True)
+	# Loop through the left wheel pins
+	for  in range(0,4):
+		xpin = StepPinsR[pin] # Get correct GPIO pin number
+		if sequence[StepCounterR][pin] != 0: # the pin is the same as the sequence we need
+			# if it is higher than 0, we can activate the pin
+			GPIO.output(xpin, True)	
 		else:
-			GPIO.output(xpin, False)
+			# if it is lower than 1, we can deactivate the pin
+			GPIO.output(xpin, False) 	
 
+	# increment the step counter with the step in the correct direction
 	StepCounterR += StepDirR
 
 	# If we reach the end of the Sequence
@@ -123,29 +140,35 @@ def turn_right_wheel( StepCounterR ):
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
 
-	return StepCounterR
+	return StepCounterR 
 
 
 
 while True: 
+	# check if we have a clicked input
 	if( GPIO.input( 26 ) == 0 ):
+		# let us know we are starting!
 		print "DETECTED: Started the protocol"
+		# start variable
 		DoDrive = True
 
+	# only do this code if we want to start	
 	if( DoDrive ):
-		counter = 0
-		StepCounterL = turn_left_wheel( StepCounterL )
-		StepCounterR = turn_right_wheel( StepCounterR )
-		# try to echo the pins
+		counter 		= 0 # we need a counter for the sens values
+		StepCounterL 	= turn_left_wheel( StepCounterL ) # turn the left wheel
+		StepCounterR 	= turn_right_wheel( StepCounterR ) # turn the right wheel
+		# Loop through the sensor pins
 		for pin in SensPins:
-			SensValues[counter] = GPIO.input( pin )
-			counter = counter + 1
-		counter = 0
-		
+			SensValues[counter] = GPIO.input( pin ) # get the input from the GPIO ( 1 or 0 )
+			counter 			= counter + 1 # incerement the counter
+		counter = 0 # reset the counter after the loop
+		# get the car direction from the sensors class
 		CarDirection	= Sensors.setCarDirection(SensValues)
 		# check if we have to stop the car
 		if( CarDirection == "STOP" ):
+			# break the loop and end the script
 			break
-		Speed   = getattr( Sequence, CarDirection )
-		
+		# get which wheel is allowed to drive
+		AllowedToDrive   = getattr( Sequence, CarDirection )
+	# sleep temporarily
 	time.sleep( 0.0010 )

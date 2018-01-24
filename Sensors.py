@@ -1,15 +1,21 @@
+import time
+
 class Sensors:
 	doneCrossing 			= False
 	hasDestination 			= "C"
+	startedCrossingAt		= 0
+	endedCrossingAt			= 0
 	direction  				= "FORWARD"
 	wait_for_destination	= { 'SLOW_LEFT' : 0, 'FORWARD' : 0, 'SLOW_RIGHT' : 0 }
 	
 	def getDirection(self):
 		return self.direction
 	def setCarDirection( self, pins ):
-		print self.wait_for_destination
-		if( pins[0] == 0 and pins[1] == 0 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and self.wait_for_destination['FORWARD'] == 0):
+		if( pins[0] == 0 and pins[1] == 0 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and self.wait_for_destination['SLOW_RIGHT'] == 0 ):
 			print "DETECTED: Crossing"
+			# timestamp for crossing
+			if( self.startedCrossingAt == 0 ):
+				self.startedCrossingAt 	= time.time()
 			# Check if we have a destination
 			if( self.hasDestination != ''):
 				print "NOTICED: We have a destination"
@@ -17,7 +23,8 @@ class Sensors:
 				if( self.doneCrossing ):
 					print "DETECTED: Arrived at house %s" % self.hasDestination
 					# we can stop
-					self.direction = "STOP"
+					self.direction = "STOP" 
+					
 					return self.direction
 				else:
 					# we have not done a crossing - go to destination
@@ -32,20 +39,23 @@ class Sensors:
 						print "NOTICED: C is RIGHT" 
 						self.direction 				= "SLOW_RIGHT"
 			else:
-				# Just let us know that we do not have a destination
+				# Just let us know that we do not have a destination 
 				print "DETECTED: No destination, just go %s!" % self.direction
 				# Just go forward...
 				self.direction = "FORWARD"
 			# wait for variable
 			self.wait_for_destination[self.direction] 	= 1
-		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 1 ): 
+		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 1  and ( time.time() - self.startedCrossingAt > 1.5 or self.direction == 'FORWARD' ) ): 
 			print "DETECTED: Direction set to FORWARD"
 			# try to reset crossing direction
 			for aDirection in self.wait_for_destination:
 				# check if a pin has been activated
-				if( self.wait_for_destination[aDirection] == 1 ):
+				if( self.wait_for_destination[aDirection] == 1 ):      
+					# debug code
+					self.endedCrossingAt = time.time()
 					# let the us know we are resetting a destination
 					print "Resetting tryout crossing for: %s" % aDirection
+					print self.endedCrossingAt - self.startedCrossingAt
 					# let us know we have done a crossing
 					self.doneCrossing						= True;
 					self.wait_for_destination[aDirection] 	= 0
