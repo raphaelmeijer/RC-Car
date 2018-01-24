@@ -26,7 +26,7 @@ def R2D2Random ():
 	os.system ('omxplayer' + file)
 	
 def sandstorm ():
-	file = ' /home/pi/music/'sandstorm.mp3
+	file = ' /home/pi/songs/'sandstorm.mp3
 	os.system ('omxplayer' + file)
 		
 		
