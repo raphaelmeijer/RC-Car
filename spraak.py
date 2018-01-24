@@ -1,8 +1,10 @@
 
 
-
+import os, random
 import pyttsx
 import time
+import RPi.GPIO as GPIO
+
 
 def aftellen():
 	count = 3
@@ -20,9 +22,65 @@ def spraak():
 		engine.say("begin")
 		engine.runAndWait()
 		
+def R2D2Random ():
+	randomfile = random.choice(os.listdir("/home/pi/music/"))
+	file = ' /home/pi/music/+ randomfile'
+	os.system ('omxplayer' + file)
+	
+def sandstorm ():
+	file = ' /home/pi/songs/sandstorm.mp3'
+	os.system ('omxplayer' + file)
+	
+	
+buttonPin = 26  
+				
+prev_state = 1  
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+
+############
+# Run code #
+############
+
+event = 1	
+
+print "Klik op de knop om een geluidje af te spelen"
+
+while True:
+
+
+	curr_state = GPIO.input(buttonPin)
+
+
+	if (curr_state != prev_state):  
+		if (curr_state == 1):  
+			event = "released"
+			print event  
+		else:   
+			event = "pressed"
+			print event
+			
+			aftellen()
+			spraak()
+			sandstorm()
+			
+		if (curr_state == 1):  
+			event = "released"
+			print event  
+		else:   
+			event = "pressed"
+			print event
+			break
+		prev_state = curr_state  
+
+	time.sleep(0.02)  
+
+GPIO.cleanup()
+		
 		
 
 		
 
-aftellen()
-spraak()
