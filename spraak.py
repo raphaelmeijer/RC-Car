@@ -22,11 +22,11 @@ def spraak():
 		
 def R2D2Random ():
 	randomfile = random.choice(os.listdir("/home/pi/music/"))
-	file = ' /home/pi/music/'+ randomfile
+	file = ' /home/pi/music/+ randomfile'
 	os.system ('omxplayer' + file)
 	
 def sandstorm ():
-	file = ' /home/pi/songs/'sandstorm.mp3
+	file = ' /home/pi/songs/sandstorm.mp3'
 	os.system ('omxplayer' + file)
 		
 		
