@@ -14,6 +14,9 @@ Sequence    = Sequence()
 # instead of physical pin numbers
 GPIO.setmode(GPIO.BCM)
  
+# disable warning
+GPIO.setwarnings(False) 
+ 
 # Define GPIO signals to use
 # Physical pins 11,15,16,18
 # GPIO17,GPIO22,GPIO23,GPIO24
@@ -25,21 +28,23 @@ SensValues  = [0,0,0]
 Speed       = Sequence.FORWARD
 DoDrive		= False
 
+print "SETUP: Setting up Left pins";
 # Set all pins as output
 for pin in StepPinsL: 
-  print "Setup pins"
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
 
+print "SETUP: Setting up Right pins";
 # Set all pins as output
 for pin in StepPinsR:
-  print "Setup pins"
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, False)
 
+print "SETUP: Setting up Sensor pins";
 for pin in SensPins:
     GPIO.setup(pin,GPIO.IN)
 
+print "SETUP: Setting up Button pins";
 for pin in ButtonPins:
 	GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
@@ -90,8 +95,6 @@ def turn_left_wheel( StepCounterL ):
 		StepCounterL = 0
 	if (StepCounterL < 0):
 		StepCounterL = StepCount+StepDirL
-	
-	time.sleep(0.0005)
 
 	return StepCounterL
 	
@@ -119,8 +122,6 @@ def turn_right_wheel( StepCounterR ):
 		StepCounterR = 0
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
-	
-	time.sleep( 0.0005 )
 
 	return StepCounterR
 
@@ -141,5 +142,10 @@ while True:
 			counter = counter + 1
 		counter = 0
 		
-		Sensors.setCarDirection(SensValues)
-		Speed   = getattr( Sequence, Sensors.getDirection() )
+		CarDirection	= Sensors.setCarDirection(SensValues)
+		# check if we have to stop the car
+		if( CarDirection == "STOP" ):
+			break
+		Speed   = getattr( Sequence, CarDirection )
+		
+	time.sleep( 0.0010 )
