@@ -52,7 +52,6 @@ print "Klik op de knop om een geluidje af te spelen"
 while True:
 
 
-
 	curr_state = GPIO.input(buttonPin)
 
 
@@ -65,8 +64,7 @@ while True:
 			print event
 			
 			aftellen()
-			spraak()
-			sandstorm()
+			spraak(), sandstorm()
 			
 		prev_state = curr_state  
 
