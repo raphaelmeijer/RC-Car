@@ -24,11 +24,12 @@ StepPinsR   = [2,3,4,17]
 StepPinsL   = [27,22,10,9]
 SensPins    = [14,15,18]
 LedPins 	= [5, 6, 13, 19, 20, 21]
-ButtonPins	= [26]
+ButtonPins	= [26, 12]
 SensValues  = [0,0,0]
-AllowedToDrive       = Sequence.FORWARD
-DoDrive		= False
-
+AllowedToDrive       		= Sequence.FORWARD
+DoDrive						= False
+previous_front_button_state	= False
+front_button_counter		= 3
 print "SETUP: Setting up Left pins";
 # Set all pins as output
 for pin in StepPinsL: 
@@ -49,10 +50,12 @@ print "SETUP: Setting up Button pins";
 for pin in ButtonPins:
 	GPIO.setup(pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
+print "SETUP: Setting up LED pins";
 # Set all pins as output
 for pin in LedPins:
   GPIO.setup(pin,GPIO.OUT)
   GPIO.output(pin, True)
+  
 # Define advanced Sequence
 # as shown in manufacturers datasheet
 sequence = [
@@ -62,7 +65,7 @@ sequence = [
    [0,1,0,0],
    [0,1,1,0],
    [0,0,1,0],
-   [0,0,1,1],
+   [0,0,1,1], 
    [0,0,0,1]
 ]
         
@@ -78,7 +81,7 @@ def turn_left_wheel( StepCounterL ):
 	global StepDirL
 	
 	# Check the direction of the wheel
-	if AllowedToDrive[0] and AllowedToDrive[1]:
+	if AllowedToDrive[0] and AllowedToDrive[1] or AllowedToDrive[0]:
 		# if have have the wheels, go front! ( the left wheel is a right wheel, so we have to do it in reverse )
 		StepDirL = -1
 	elif AllowedToDrive[0] == False : 
@@ -115,7 +118,7 @@ def turn_right_wheel( StepCounterR ):
 	# We need the global var, otherwise it will reset always
 	global StepDirR
 	
-	if AllowedToDrive[0] and AllowedToDrive[1]:
+	if ( AllowedToDrive[0] and AllowedToDrive[1] ) or AllowedToDrive[1]:
 		# if have have the wheels, go front! ( the left wheel is a right wheel, so we have to do it in reverse )
 		StepDirR = 1
 	if AllowedToDrive[1] == False:
@@ -151,13 +154,46 @@ def turn_right_wheel( StepCounterR ):
 
 
 while True: 
+	current_front_button_state = GPIO.input(12)
+	
+	if (current_front_button_state != previous_front_button_state and current_front_button_state == 1):  
+		# we have to reset the counter
+		if( front_button_counter >= 4 ):
+			front_button_counter = 1
+		else:
+			front_button_counter  = front_button_counter + 1  # always increment
+		# ask for verification
+		if( front_button_counter % 4 == 0 ):
+			print "NOTICED: We have selected Nothing"
+			# No destination
+			
+			# play speech for confirmation of end destination
+			
+		elif( front_button_counter % 3 == 0 ):
+			print "NOTICED: We have selected C"
+			# go to C
+			
+			# play speech for confirmation of end destination
+			
+		elif( front_button_counter % 2 == 0 ):
+			print "NOTICED: We have selected B"
+			# go to B
+			
+			# play speech for confirmation of end destination
+			
+		elif( front_button_counter % 1 == 0 ):
+			print "NOTICED: We have selected A";
+			# go to A
+			
+			# play speech for confirmation of end destination
+				
 	# check if we have a clicked input
 	if( GPIO.input( 26 ) == 0 ):
 		# let us know we are starting!
 		print "DETECTED: Started the protocol"
 		# start variable
 		DoDrive = True
-
+	
 	# only do this code if we want to start	
 	if( DoDrive ):
 		counter 		= 0 # we need a counter for the sens values
@@ -176,7 +212,11 @@ while True:
 			break
 		# get which wheel is allowed to drive
 		AllowedToDrive   = getattr( Sequence, CarDirection )
+	#set previous button
+	previous_front_button_state = current_front_button_state  
 	# sleep temporarily
-	time.sleep( 0.0010 )
-
+	time.sleep( 0.0010 )  
+	
+# clean the GPIO 
+print "Cleaning up GPIO"
 GPIO.cleanup()
