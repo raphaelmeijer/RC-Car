@@ -84,38 +84,11 @@ class Sensors:
 			self.direction   = "LEFT"
 			self.last_turn 		= self.direction
 		elif( pins[0] == 1 and pins[1] == 1 and pins[2] == 1 ):
-			if( self.last_turn != '' ):
+			if( ( self.last_turn == 'RIGHT' and self.direction == 'LEFT' ) or ( self.last_turn == 'LEFT' and self.direction == 'RIGHT' ) ):
+				self.direction 	= "FORWARD"
+			elif( self.last_turn != '' ):
 				# do last direction but fast!
 				self.direction 	= self.last_turn.replace("SLOW_", "") 
 				# empty var
 				self.last_turn 	= ''
-			# all sensors are on
-			# check if we have are allowed to check again
-		#	if( time.time() - self.last_timeout_check > self.timeout ):
-				# set new timestamp!
-				#self.last_timeout_check	= time.time()
-				#check for direction
-				#if(  self.last_random_destination['FORWARD'] == 0 ):
-					# Go forward a little bit
-					#self.direction								= "FORWARD"
-					#self.last_random_destination['FORWARD'] 	= 1
-					#print "DETECTED: Direction to FORWARD"
-				#elif( self.last_random_destination['LEFT'] == 0  ):
-					# GO left a bit
-					#self.direction 	= "LEFT"
-					#self.last_random_destination['LEFT'] 	= 1
-					#print "DETECTED: Direction to LEFT"
-				#elif( self.last_random_destination['RIGHT'] == 0 ): 
-					# Go right a bit 
-					#self.direction	= "RIGHT"
-					#self.last_random_destination['RIGHT'] 	= 1
-					#print "DETECTED: Direction to RIGHT"
-				#elif( self.last_random_destination['RIGHT'] 	== 1 and self.last_random_destination['LEFT'] 	== 1 and self.last_random_destination['FORWARD'] 	== 1):
-					# reset!
-					#self.last_random_destination['LEFT'] 	= 0
-					#self.last_random_destination['FORWARD'] 	= 0
-					#self.last_random_destination['RIGHT'] 	= 0
-					#print "DETECTED: RESET"
-					
-				#self.direction 	= "RIGHT"	
 		return self.direction

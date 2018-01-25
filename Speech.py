@@ -1,36 +1,32 @@
-class talk:
-	import os, random
-	import pyttsx
-	import time
-	import RPi.GPIO as GPIO
+import os, random
+import pyttsx
+import time
+import RPi.GPIO as GPIO
 
-	#engine sound
-	def Starting_sound ():
-		file = ' /home/pi/music/"motor.mp3" '
-		os.system ('omxplayer' + file)
-	#starting countdown when pressing button 	
-	def aftellen():
-		count = 3
-		while (count > 0): 
-			engine = pyttsx.init()
-			engine.setProperty( 'volume', 12)
-			engine.say(count)
-			engine.runAndWait()
-			count = count -1
-			print count
-			
-			
-	message = "  "
-	def talkBack(message):
-		# text to speech engine 
-		engine = pyttsx.init()
-		engine.setProperty( 'volume', 12)
-		engine.say(message)
-		engine.runAndWait()
-
+class Speech:
+	engine 		= False # we will store the sound engine in this variable
+	count_from 	=  3 	# we will count from 3
 	
-	def messageStart():	
-		engine = pyttsx.init()
-		engine.setProperty( 'volume', 12)
-		engine.say("Press the button on the Front to make a choice which way to go, then press the button on the back to start the engines")
-		engine.runAndWait()
+	def __init__( self ):
+		# initiate the sound engine
+		self.engine 	= pyttsx.init()
+		# set the volume of the engine
+		self.engine.setProperty( 'volume', 12)
+	def play_motor_sound ( self ):
+		# the file to play
+		file = ' /home/pi/music/"motor.mp3" '
+		# let the OS to play the file
+		os.system ('omxplayer ' + file)
+	#starting countdown when pressing button 	
+	def count_of( self ):
+		# loop through from count
+		while (self.count_from > 0): 
+			# let the user know on which count we are
+			self.speak(self.count_from)
+			# we need 1 less
+			self.count_from = self.count_from - 1 
+	def speak( self, message ):
+		# tell the user what we want to say
+		self.engine.say( message )
+		# run the engine and wait for it to finish
+		self.engine.runAndWait()
