@@ -13,6 +13,8 @@ class Sensors:
 	last_timeout_check		= 0
 	last_random_destination	= { 'LEFT' : 0, 'FORWARD' : 0, 'RIGHT' : 0 }
 	last_turn 				= ""
+	turnDelay 				= 0.5
+	lastTurnDelay 			= 0
 	
 	def __init__( self ):
 		self.Speech 	= Speech()
@@ -39,6 +41,7 @@ class Sensors:
 					# we have not done a crossing - go to destination
 					if( self.hasDestination == "A" ):
 						print "NOTICED: A is LEFT"
+						print self.Speech
 						self.Speech.speak( "We are going Left" )
 						self.direction 				= "SLOW_LEFT"
 					elif( self.hasDestination == "B" ):
@@ -57,7 +60,7 @@ class Sensors:
 				self.direction	= "FORWARD" 
 			# wait for variable
 			self.wait_for_destination[self.direction] 	= 1
-		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 1  and ( time.time() - self.startedCrossingAt > 1.5 or self.direction == 'FORWARD' ) ): 
+		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 1  and ( time.time() - self.startedCrossingAt > 1.5 or self.direction == 'FORWARD' ) and time.time() - self.lastTurnDelay > self.turnDelay  ): 
 			print "DETECTED: Direction set to FORWARD"
 			# try to reset crossing direction
 			for aDirection in self.wait_for_destination:
@@ -65,27 +68,31 @@ class Sensors:
 				if( self.wait_for_destination[aDirection] == 1 ):      
 					# debug code
 					self.endedCrossingAt = time.time()
+					self.Speech.speak( "We have done a crossing!" )
 					# let the us know we are resetting a destination
-					print "Resetting tryout crossing for: %s" % aDirection
 					print self.endedCrossingAt - self.startedCrossingAt
 					# let us know we have done a crossing
 					self.doneCrossing						= True;
 					self.wait_for_destination[aDirection] 	= 0
 			self.direction   						= "FORWARD"
-		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 ):
+		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and time.time() - self.lastTurnDelay > self.turnDelay ):
 			print "DETECTED: Direction set to SLOW_RIGHT"
+			self.lastTurnDelay	= time.time()
 			self.direction   	= "SLOW_RIGHT"
 			self.last_turn 		= self.direction
-		elif( pins[0] == 1 and pins[1] == 1 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 ):
+		elif( pins[0] == 1 and pins[1] == 1 and pins[2] == 0 and self.wait_for_destination['SLOW_LEFT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and time.time() - self.lastTurnDelay > self.turnDelay ):
 			print "DETECTED: Direction set to RIGHT"
+			self.lastTurnDelay	= time.time()
 			self.direction   = "RIGHT"
 			self.last_turn 		= self.direction
-		elif( pins[0] == 0 and pins[1] == 0 and pins[2] == 1 and self.wait_for_destination['SLOW_RIGHT'] == 0 and self.wait_for_destination['FORWARD'] == 0 ):
+		elif( pins[0] == 0 and pins[1] == 0 and pins[2] == 1 and self.wait_for_destination['SLOW_RIGHT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and time.time() - self.lastTurnDelay > self.turnDelay ):
 			print "DETECTED: Direction set to SLOW_LEFT"
+			self.lastTurnDelay	= time.time()
 			self.direction   = "SLOW_LEFT"
 			self.last_turn 		= self.direction
-		elif( pins[0] == 0 and pins[1] == 1 and pins[2] == 1 and self.wait_for_destination['SLOW_RIGHT'] == 0 and self.wait_for_destination['FORWARD'] == 0):
+		elif( pins[0] == 0 and pins[1] == 1 and pins[2] == 1 and self.wait_for_destination['SLOW_RIGHT'] == 0 and self.wait_for_destination['FORWARD'] == 0 and time.time() - self.lastTurnDelay > self.turnDelay 	):
 			print "DETECTED: Direction set to LEFT"
+			self.lastTurnDelay	= time.time()
 			self.direction   = "LEFT"
 			self.last_turn 		= self.direction
 		elif( pins[0] == 1 and pins[1] == 1 and pins[2] == 1 ):

@@ -26,6 +26,7 @@ class Speech:
 			# we need 1 less
 			self.count_from = self.count_from - 1 
 	def speak( self, message ):
+		print "Said: %s" % message
 		# tell the user what we want to say
 		self.engine.say( message )
 		# run the engine and wait for it to finish
