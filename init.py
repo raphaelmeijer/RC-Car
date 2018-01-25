@@ -1,13 +1,16 @@
 #!/usr/bin/python
 # Import required libraries
+import os, random
+import pyttsx
 import sys
 import time
 from Sensors import Sensors
 from Sequence import Sequence
 # import led
 import RPi.GPIO as GPIO
+
  
-# Init classes
+# Init classes 
 Sensors     = Sensors()
 Sequence    = Sequence()
 
@@ -33,8 +36,8 @@ front_button_counter		= 3
 print "SETUP: Setting up Left pins";
 # Set all pins as output
 for pin in StepPinsL: 
-  GPIO.setup(pin,GPIO.OUT)
-  GPIO.output(pin, False)
+	GPIO.setup(pin,GPIO.OUT)
+	GPIO.output(pin, False)
 
 print "SETUP: Setting up Right pins";
 # Set all pins as output
@@ -149,9 +152,40 @@ def turn_right_wheel( StepCounterR ):
 	if (StepCounterR<0):
 		StepCounterR = StepCount+StepDirR
 
-	return StepCounterR 
+	return StepCounterR
+#engine sound
+def Starting_sound ():
+		file = ' /home/pi/music/"motor.mp3" '
+		os.system ('omxplayer ++vol N' + file)
+	#starting countdown when pressing button 	
+def aftellen():
+		count = 3
+		while (count > 0): 
+			engine = pyttsx.init()
+			engine.setProperty( 'volume', 12)
+			engine.say(count)
+			engine.runAndWait()
+			count = count -1
+			print count
+			
+			
+message = "  "
+def talkBack(message):
+# text to speech engine 
+	engine = pyttsx.init()
+	engine.setProperty( 'volume', 12)
+	engine.say(message)
+	engine.runAndWait()
+	
+	
+def messageStart():	
+	engine = pyttsx.init()
+	engine.setProperty( 'volume', 12)
+	engine.say("Press the button on the Front to make a choice which way to go, then press the button on the back to start the engines")
+	engine.runAndWait()
 
 
+messageStart()
 
 while True: 
 	current_front_button_state = GPIO.input(12)
@@ -166,36 +200,54 @@ while True:
 		if( front_button_counter % 4 == 0 ):
 			print "NOTICED: We have selected Nothing"
 			# No destination
-			
+			Sensors.hasDestination = ""
+			message ="Current direction: No direction"
+			talkBack(message)
 			# play speech for confirmation of end destination
 			
 		elif( front_button_counter % 3 == 0 ):
 			print "NOTICED: We have selected C"
 			# go to C
+			Sensors.hasDestination 	= "C"
+			message ="You have chosen: Right"
+			talkBack(message)
+			print Sensors.hasDestination
+			# bericht = links
+			#spraak(bericht)
+			
 			
 			# play speech for confirmation of end destination
 			
 		elif( front_button_counter % 2 == 0 ):
 			print "NOTICED: We have selected B"
 			# go to B
-			
+			Sensors.hasDestination 			= "B"
+			message ="You have chosen: straight"
+			talkBack(message)
+			print Sensors.hasDestination
 			# play speech for confirmation of end destination
 			
 		elif( front_button_counter % 1 == 0 ):
 			print "NOTICED: We have selected A";
-			# go to A
-			
+			Sensors.hasDestination 			= "A"
+			message ="You have chosen: left"
+			talkBack(message)
+			print Sensors.hasDestination
 			# play speech for confirmation of end destination
 				
 	# check if we have a clicked input
 	if( GPIO.input( 26 ) == 0 ):
 		# let us know we are starting!
 		print "DETECTED: Started the protocol"
+		#staring countdown when pressing back button
+		aftellen()
+		Starting_sound ()
 		# start variable
 		DoDrive = True
 	
 	# only do this code if we want to start	
 	if( DoDrive ):
+		
 		counter 		= 0 # we need a counter for the sens values
 		StepCounterL 	= turn_left_wheel( StepCounterL ) # turn the left wheel
 		StepCounterR 	= turn_right_wheel( StepCounterR ) # turn the right wheel
@@ -208,6 +260,10 @@ while True:
 		CarDirection	= Sensors.setCarDirection(SensValues)
 		# check if we have to stop the car
 		if( CarDirection == "STOP" ):
+			engine = pyttsx.init()
+			engine.say("You have reached your destination: " + Sensors.hasDestination) 
+			
+			engine.runAndWait()
 			# break the loop and end the script
 			break
 		# get which wheel is allowed to drive
