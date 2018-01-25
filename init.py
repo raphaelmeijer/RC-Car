@@ -10,7 +10,7 @@ from Speech import Speech
 # import led
 import RPi.GPIO as GPIO
 
- 
+
 # Init classes 
 Sensors     = Sensors()
 Sequence    = Sequence()
@@ -36,6 +36,7 @@ DoDrive						= False
 previous_front_button_state	= False
 front_button_counter		= 3
 message 					= ""
+DriveSwitch					= False
 print "SETUP: Setting up Left pins";
 # Set all pins as output
 for pin in StepPinsL: 
@@ -190,7 +191,8 @@ while True:
 			message 						= "You have chosen: left"
 		Speech.speak(message)
 	# check if we have a clicked input
-	if( GPIO.input( 26 ) == 0 ):
+	if( GPIO.input( 26 ) == 0 or DriveSwitch == False and sys.argv[1] ):
+		DriveSwitch 	= True
 		# let us know we are starting!
 		print "DETECTED: Started the protocol"
 		# count down!
@@ -198,7 +200,7 @@ while True:
 		# motor sound after count down
 		Speech.play_motor_sound()
 		# open the file 
-		f 						= open('end_destination.txt','r') 
+		f 						= open('/home/pi/challengeweek/end_destination.txt','r') 
 		# get destination	
 		destination 			= f.read() 
 		if( destination != "" ):

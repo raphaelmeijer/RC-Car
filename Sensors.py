@@ -1,6 +1,7 @@
 import time
 import os, random
 import pyttsx
+from Speech import Speech
 class Sensors:
 	doneCrossing 			= False
 	hasDestination 			= "A" 
@@ -13,6 +14,8 @@ class Sensors:
 	last_random_destination	= { 'LEFT' : 0, 'FORWARD' : 0, 'RIGHT' : 0 }
 	last_turn 				= ""
 	
+	def __init__( self ):
+		self.Speech 	= Speech()
 	def getDirection(self):
 		return self.direction
 	def setCarDirection( self, pins ):
@@ -25,7 +28,7 @@ class Sensors:
 			if( self.hasDestination != ''):
 				print "NOTICED: We have a destination"
 				# we might have a crossing - specify
-				if( self.doneCrossing ):
+				if( self.doneCrossing ): 
 					print "DETECTED: Arrived at house %s" % self.hasDestination
 					#init.message= "You have arrived at your destination %s" % self.hasDestination
 					# we can stop
@@ -36,20 +39,22 @@ class Sensors:
 					# we have not done a crossing - go to destination
 					if( self.hasDestination == "A" ):
 						print "NOTICED: A is LEFT"
+						self.Speech.speak( "We are going Left" )
 						self.direction 				= "SLOW_LEFT"
 					elif( self.hasDestination == "B" ):
 						print "NOTICED: B is FORWARD"
+						self.Speech.speak( "We are going Forward" )
 						self.direction 				= "FORWARD"
 						# self.wait_for_destination	= 1 
 					elif( self.hasDestination == "C" ):
 						print "NOTICED: C is RIGHT" 
+						self.Speech.speak( "We are going right" )
 						self.direction 				= "SLOW_RIGHT"
 			else:
 				# Just let us know that we do not have a destination 
 				print "DETECTED: No destination, just go FORWARD!"
-				# Just go 
-				# self.direction	= self.direction.replace( "SLOW_", "" )
-				self.direction	= "FORWARD"
+				# let us go forward!
+				self.direction	= "FORWARD" 
 			# wait for variable
 			self.wait_for_destination[self.direction] 	= 1
 		elif( pins[0] == 1 and pins[1] == 0 and pins[2] == 1  and ( time.time() - self.startedCrossingAt > 1.5 or self.direction == 'FORWARD' ) ): 
