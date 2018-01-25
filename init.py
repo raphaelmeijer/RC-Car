@@ -191,22 +191,23 @@ while True:
 			message 						= "You have chosen: left"
 		Speech.speak(message)
 	# check if we have a clicked input
-	if( GPIO.input( 26 ) == 0 or DriveSwitch == False and sys.argv[1] ):
+	if( GPIO.input( 26 ) == 0 or DriveSwitch == False and len( sys.argv ) > 1 and sys.argv[1] ):
 		DriveSwitch 	= True
 		# let us know we are starting!
 		print "DETECTED: Started the protocol"
-		# count down!
-		Speech.count_of()
-		# motor sound after count down
-		Speech.play_motor_sound()
-		# open the file 
+		# count down!# open the file 
 		f 						= open('/home/pi/challengeweek/end_destination.txt','r') 
 		# get destination	
 		destination 			= f.read() 
 		if( destination != "" ):
 			# set destination
 			Sensors.hasDestination	= destination 
-			print "Chosen destination: %s" % destination
+			print "Chosen destination: %s" % Sensors.getDestination()
+		#where are we going to
+		#speech.count_des()
+		#Speech.speak("You have reached your destination: " + Sensors.hasDestination) 
+		# motor sound after count down
+		Speech.play_motor_sound()
 		# start variable
 		DoDrive = True
 	
@@ -225,7 +226,7 @@ while True:
 		# check if we have to stop the car
 		if( CarDirection == "STOP" ):
 			# let the user know we have arrived at the destination
-			Speech.speak("You have reached your destination: " + Sensors.hasDestination) 
+			Speech.speak("You have reached your destination: %s" % Sensors.getDestination()) 
 			# break the loop and end the script
 			break
 		# get which wheel is allowed to drive

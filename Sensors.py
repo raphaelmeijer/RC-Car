@@ -35,14 +35,13 @@ class Sensors:
 					#init.message= "You have arrived at your destination %s" % self.hasDestination
 					# we can stop
 					self.direction = "STOP" 
-					# self.speakEnd()
 					return self.direction
 				else:
 					# we have not done a crossing - go to destination
 					if( self.hasDestination == "A" ):
 						print "NOTICED: A is LEFT"
 						print self.Speech
-						self.Speech.speak( "We are going Left" )
+						self.Speech.speak( "We are going to LEFT" )
 						self.direction 				= "SLOW_LEFT"
 					elif( self.hasDestination == "B" ):
 						print "NOTICED: B is FORWARD"
@@ -104,3 +103,13 @@ class Sensors:
 				# empty var
 				self.last_turn 	= ''
 		return self.direction
+	def getDestination( self ):
+		formatted_destination 	= ""
+		
+		if( self.hasDestination == 'A' ):
+			formatted_destination	= "Starbucks"
+		elif( self.hasDestination == 'B' ):
+			formatted_destination	= "Apple store"
+		elif( self.hasDestination == 'C' ):
+			formatted_destination	= "Science center"
+		return formatted_destination

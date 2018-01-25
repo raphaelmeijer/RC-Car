@@ -2,7 +2,6 @@ import os, random
 import pyttsx
 import time
 import RPi.GPIO as GPIO
-
 class Speech:
 	engine 		= False # we will store the sound engine in this variable
 	count_from 	=  3 	# we will count from 3
@@ -12,6 +11,7 @@ class Speech:
 		self.engine 	= pyttsx.init()
 		# set the volume of the engine
 		self.engine.setProperty( 'volume', 12)
+		self.engine.setProperty( 'rate', 1 )
 	def play_motor_sound ( self ):
 		# the file to play
 		file = ' /home/pi/music/"motor.mp3" '
@@ -24,7 +24,7 @@ class Speech:
 			# let the user know on which count we are
 			self.speak(self.count_from)
 			# we need 1 less
-			self.count_from = self.count_from - 1 
+			self.count_from = self.count_from - 1 		
 	def speak( self, message ):
 		print "Said: %s" % message
 		# tell the user what we want to say
